@@ -10,7 +10,9 @@ var ship = {
     angle:0,
     element: document.getElementById('ship')
 }
-console.log(ship);
+ship.element.style.top = "0px";
+ship.element.style.left = "0px";
+
 
   ship.element.addEventListener('asteroidDetected', function (event) {
 
@@ -37,7 +39,7 @@ console.log(ship);
     function handleKeys(event) {
         console.log(event.keyCode);
         if(event.keyCode === 38) {
-          if(ship.velocity === 10) {
+          if(ship.velocity >= 10) {
             ship.velocity = 10;
             console.log(ship.velocity);
           }
@@ -48,24 +50,31 @@ console.log(ship);
 
         }
         if(event.keyCode === 40) {
-          if(ship.velocity === 0) {
+          if(ship.velocity <= 0) {
             ship.velocity = 0;
             console.log(ship.velocity);
           }
           else {
-            ship.velocity = ship.velocity + 1;
+            ship.velocity = ship.velocity - 1;
             console.log(ship.velocity);
           }
         }
         if(event.keyCode === 37) {
           ship.angle = ship.angle - 15;
+          ship.element.style.transform = "rotate(" + ship.angle + "deg)";
             console.log(ship.angle);
+            console.log(ship.element.style.transform);
           }
           if(event.keyCode === 39) {
             ship.angle = ship.angle + 15;
+            ship.element.style.transform = "rotate(" + ship.angle + "deg)";
               console.log(ship.angle);
             }
         // Implement me!
+
+
+        // getShipMovement(ship.velocity, ship.angle);
+        // console.log(getShipMovement(ship.velocity, ship.angle));
 
     }
     document.querySelector('body').addEventListener('keyup', handleKeys);
@@ -93,11 +102,11 @@ console.log(ship);
     function gameLoop() {
         // This function for getting ship movement is given to you (at the bottom).
         // NOTE: you will need to change these arguments to match your ship object!
-        // var move = getShipMovement(shipsCurrentVelocity, shipsCurrentAngle);
-
+        var move = getShipMovement(ship.velocity, ship.angle);
+        ship.element.style.top = (parseInt(ship.element.style.top) - move.top) + "px";
+        ship.element.style.left = (parseInt(ship.element.style.left) + move.left) + "px";
         // Move the ship!
-
-
+// ship.element.style.transform = "rotate(" + ship.angle + "deg)";
         // Time to check for any collisions (see below)...
         checkForCollisions();
     }
