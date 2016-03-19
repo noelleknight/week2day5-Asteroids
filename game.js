@@ -10,13 +10,23 @@ var ship = {
     angle:0,
     element: document.getElementById('ship')
 }
-ship.element.style.top = "0px";
-ship.element.style.left = "0px";
+ship.element.style.top = "500px";
+ship.element.style.left = "500px";
+
+var asteroidz = [];
 
 
-  ship.element.addEventListener('asteroidDetected', function (event) {
+
+  ship.element.addEventListener('asteroidDetected', function (event){
 
 
+  asteroidz.push(event.detail);
+
+
+
+
+
+        // if(event.detail)
         // You can detect when a new asteroid appears with this event.
         // The new HTML element will be in event.detail
 
@@ -87,6 +97,8 @@ ship.element.style.left = "0px";
      */
     document.querySelector('main').addEventListener('crash', function () {
 
+      ship.velocity = 0;
+
         // What might you need/want to do in here?
 
     });
@@ -108,7 +120,9 @@ ship.element.style.left = "0px";
         // Move the ship!
 // ship.element.style.transform = "rotate(" + ship.angle + "deg)";
         // Time to check for any collisions (see below)...
-        checkForCollisions();
+        checkForCollisions(ship.element.getBoundingClientRect(),asteroidz);
+
+
     }
 
     /**
@@ -125,12 +139,21 @@ ship.element.style.left = "0px";
      *
      * @return void
      */
-    function checkForCollisions() {
+    function checkForCollisions(ship, asPos) {
+      for (var i = 0; i < asteroidz.length; i++) {
+        var asteroidPosition = asPos[i].getBoundingClientRect();
+          if (!(asteroidPosition.left > ship.right ||
+               asteroidPosition.right < ship.left ||
+               asteroidPosition.top > ship.bottom ||
+               asteroidPosition.bottom < ship.top)) {
+            crash(asteroidz[i]);
 
-        // Implement me!
+            console.log("crash!!!");
+
+          }
 
     }
-
+}
 
     /** ************************************************************************
      *       These functions and code are given to you. DO NOT ALTER THEM.
@@ -169,5 +192,4 @@ ship.element.style.left = "0px";
             top: (velocity * Math.cos(angle * Math.PI / 180))
         };
     }
-
-})();
+  })();
